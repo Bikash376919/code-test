@@ -4,31 +4,30 @@ pipeline{
         jdk 'myjava'
         maven 'mymaven'
     }
-    agent none
       stages{
            stage('Checkout'){
-	    agent any
+		   agent {label 'slave1'}
                steps{
 		 echo 'cloning..'
                  git 'https://github.com/Bikash376919/code-test.git'
               }
           }
           stage('Compile'){
-              agent any
+              agent {label 'slave1'}
               steps{
                   echo 'compiling..'
                   sh 'mvn compile'
 	      }
           }
           stage('CodeReview'){
-              agent any
+              agent {label 'slave1'}
               steps{
 		  echo 'codeReview'
                   sh 'mvn pmd:pmd'
               }
           }
            stage('UnitTest'){
-		   agent any
+		   agent {label 'slave1'}
               steps{
 	         
                   sh 'mvn test'
@@ -40,14 +39,14 @@ pipeline{
            }	
           }
            stage('MetricCheck'){
-               agent any
+               agent {label 'slave1'}
               steps{
                   sh 'mvn cobertura:cobertura -Dcobertura.report.format=xml'
               }
                	
           }
           stage('Package'){
-              agent any
+              agent {label 'slave1'}
               steps{
                   sh 'mvn package'
               }
